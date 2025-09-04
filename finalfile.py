@@ -1,4 +1,4 @@
-# this is final file which contains all the changes and is working fine , it has very less
+# this is final file which contains all the changes and is working fine , it has very less comments
 
 import psutil
 import time
