@@ -1,3 +1,13 @@
+##### NON FUNCTIONAL CODE #####
+
+
+
+#this is the first file of the project like the protoype and also the base file of the project from where this prject started 
+# in this file i leared matplotlib and psutil 
+# 
+
+
+
 import psutil
 import time
 import threading
