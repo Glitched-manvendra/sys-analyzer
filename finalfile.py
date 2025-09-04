@@ -1,3 +1,5 @@
+# this is final file which contains all the changes and is working fine , it has very less
+
 import psutil
 import time
 import threading
@@ -16,9 +18,9 @@ ram_points = []
 time_points = []
 
 
-plt.ion()  # Turn on interactive mode
+plt.ion() 
 fig, (ax1, ax2) = plt.subplots(2,1, figsize=(10, 8))
-# Replace with your image URL
+
 url = "https://wallpapercave.com/wp/wp11032877.jpg"
 
 response = requests.get(url)
@@ -26,12 +28,6 @@ img = Image.open(BytesIO(response.content))
 
 # Convert to format compatible with matplotlib
 img = img.convert("RGB")
-# plt.ion() ## for real time graph
-# fig,ax=plt.subplots()
-
-## instead of using threading , we should merge the cpu meteer and ram usage meter in single thread function
-# 
-#  
 
 
 
@@ -68,6 +64,7 @@ def monitor_cpu_ram():
         plt.pause(0.1)
       
 
+#till here everything is fine, working and good ,also the graph is working fine and showing data in real time :D
 
 
 
@@ -81,17 +78,4 @@ plt.ioff()
 plt.show()
 
 
-
-# Use a single thread for synchronized data collection
-# threading.Thread(target=monitor_cpu_ram).start()
-
-
-
-# monitor_thread = threading.Thread(target=monitor_cpu_ram)
-# monitor_thread.start()
-# monitor_thread.join()
-
-# Plot the graphs
-# cpu usage bar graph and ram ko plotme kiya hai
-# ax.clear
 
