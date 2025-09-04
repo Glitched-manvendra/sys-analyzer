@@ -2,84 +2,88 @@ import psutil
 import time
 import threading
 import matplotlib.pyplot as plt
-import numpy as np
-
-
-# import monitor
-# monitor.my_function()
+# from matplotlib.animation import FuncAnimation
 
 
 
 
 
+cpu_points = []
+ram_points = []
+time_points = []
+
+
+plt.ion()  # Turn on interactive mode
+fig, (ax1, ax2) = plt.subplots(2,1, figsize=(10, 8))
+img = plt.imread("proxy-image.jpg")  
+# plt.ion() ## for real time graph 
+# fig,ax=plt.subplots()
+
+## instead of using threading , we should merge the cpu meteer and ram usage meter in single thread function
+# 
+#  
 
 
 
-# what we will doing is that we will make this project in two parts 
-#            first will be the data collection part where we will collect the data using psutil
-
-
-#and in second part we will plot the graph and if got time we will be also adding the name of the apps which were not getting used but still using very 
-# much of the cpu and ramm
-
-# cpu_points=[]
-# time_points=[]
-
-
-
-# how we will collect the data ???
-# using psutil 
-
-
-
-def monitor_cpu():
-    
-    start= time.time()
+def monitor_cpu_ram():
+    start = time.time()
     while time.time() - start <= 20:
         cpu = psutil.cpu_percent(interval=1)
-        print(f"CPU USAGE IS : {cpu}\t")
-   
-
-def monitor_ram():
-    
-    start_ram= time.time()
-    while time.time() - start_ram <=20:
-        ram= psutil.virtual_memory()
-        threshold = 1*1024*1024*1024*1024
-        if ram.available<= threshold:
-            print(f"RAM IS : {ram}")
-            time.sleep(2)
+        ram = psutil.virtual_memory().percent
+        elapsed = time.time() - start
+        cpu_points.append(cpu)
+        ram_points.append(ram)
+        time_points.append(elapsed)
+        ax1.clear()
+        ax2.clear()
+        print(f"CPU USAGE: {cpu}%\tRAM USAGE: {ram}%")
 
 
-
-cpu_thread = threading.Thread(target=monitor_cpu)
-ram_thread = threading.Thread(target=monitor_ram)
-
-
-# here we have completed the data i.e. we are now going to use matplot lib  to plot the graphs  
-
-# cpu_points= np.array([cpu])
-# time_points= np.array([time])
+        ax1.imshow(img , extent=[min(time_points), max(time_points), min(cpu_points), max(cpu_points)])
+        ax2.imshow(img , extent=[min(time_points), max(time_points), min(ram_points), max(ram_points)]) 
 
 
 
-# plt.show()
-
-
-
-
-
+        ax1.plot(time_points, cpu_points, label='CPU Usage (%)',color='green')
+        ax2.plot(time_points, ram_points, label='RAM Usage (%)',color='blue')
+        ax1.set_xlabel('Time (s)')
+        ax1.set_ylabel('CPU Usage (%)')
+        ax2.set_ylabel('RAM Usage (%)')
+        ax1.set_title('CPU and RAM Usage Over Time')
+        ax1.set_ylim(0,100)
+        ax2.set_ylim(0,100)
+        ax1.legend()
+        ax2.legend()
+        ax1.grid()
+        ax2.grid()
+        plt.tight_layout()
+        plt.pause(0.1)
+      
 
 
 
 
+monitor_cpu_ram()
 
 
 
-cpu_thread.start()
-ram_thread.start()
 
 
-cpu_thread.join()
-ram_thread.join()
+plt.ioff()
+plt.show()
+
+
+
+# Use a single thread for synchronized data collection
+# threading.Thread(target=monitor_cpu_ram).start()
+
+
+
+# monitor_thread = threading.Thread(target=monitor_cpu_ram)
+# monitor_thread.start()
+# monitor_thread.join()
+
+# Plot the graphs
+# cpu usage bar graph and ram ko plotme kiya hai
+# ax.clear
 
